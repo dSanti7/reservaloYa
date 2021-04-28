@@ -1,0 +1,26 @@
+CREATE TABLE `db_reservalo_ya`.`clientDB` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `phone_number` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(120) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
+
+CREATE TABLE `db_reservalo_ya`.`owner_shop` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `phone_number` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(120) NOT NULL,
+  `password` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `db_reservalo_ya`.`shopDB` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `position` VARCHAR(45) NULL,
+  `phone_number` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(120) NOT NULL,
+  PRIMARY KEY (`id`));
