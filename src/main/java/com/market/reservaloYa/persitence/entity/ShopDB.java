@@ -33,6 +33,6 @@ public class ShopDB implements Serializable {
     private OwnerShopDB ownerShopDB;
 
     @OneToMany(mappedBy = "shopDB")
-    private List<ShopTableDB> shopTableDBS;
+    private List<ShopTableDB> shopTablesDB;
 
 }

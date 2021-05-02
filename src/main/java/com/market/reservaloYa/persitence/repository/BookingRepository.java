@@ -5,51 +5,45 @@ import com.market.reservaloYa.domain.repository.IBookingRepository;
 import com.market.reservaloYa.persitence.crud.BookingCrudRepository;
 import com.market.reservaloYa.persitence.crud.BookingShopTableCrudRepository;
 import com.market.reservaloYa.persitence.crud.ClientCrudRepository;
-import com.market.reservaloYa.persitence.crud.ShopTableCrudRepository;
 import com.market.reservaloYa.persitence.entity.BookingDB;
 import com.market.reservaloYa.persitence.entity.BookingShopTableDB;
-import com.market.reservaloYa.persitence.entity.ClientDB;
-import com.market.reservaloYa.persitence.entity.ShopTableDB;
+import com.market.reservaloYa.persitence.entity.BookingShopTablePKDB;
 import com.market.reservaloYa.persitence.mapper.BookingMapper;
+import com.market.reservaloYa.persitence.mapper.ShopTableMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class BookingRepository implements IBookingRepository {
 
     @Autowired
     private BookingCrudRepository bookingCrudRepository;
-    @Autowired
-    private ClientCrudRepository clientCrudRepository;
-    @Autowired
-    private ShopTableCrudRepository shopTableCrudRepository;
+
     @Autowired
     private BookingShopTableCrudRepository bookingShopTableCrudRepository;
     @Autowired
     private BookingMapper bookingMapper;
+    @Autowired
+    private ShopTableMapper shopTableMapper;
 
     @Override
     public List<Booking> getAll() {
+        return bookingMapper.toBookingsDomain((List<BookingDB>) bookingCrudRepository.findAll());
 
-        List<BookingDB> bookingDBList = (List<BookingDB>) bookingCrudRepository.findAll();
-        List<ClientDB> clientDBS = bookingDBList.stream().map(BookingDB::getClientDB).collect(Collectors.toList());
-        List<List<BookingShopTableDB>> bookingsShopTable = bookingDBList.stream().map(BookingDB::getBookingShopTableDBS).collect(Collectors.toList());
-        List<List<ShopTableDB>> shopTables = bookingsShopTable.stream()
-                .map(listBookingShopTable -> listBookingShopTable.stream()
-                        .map(BookingShopTableDB::getShopTableDB).collect(Collectors.toList())
-                ).collect(Collectors.toList());
-
-//        return bookingMapper.toBookingsDomain(bookingDBList, clientDBS, shopTables, bookingsShopTable);
-        return null;
     }
 
     @Override
     public Optional<Booking> getById(Long id) {
-        return Optional.of(bookingMapper.toBookingDomain(bookingCrudRepository.findById(id).orElse(null)));
+        BookingDB bookingDB = bookingCrudRepository.findById(id).orElse(null);
+        Booking booking = bookingMapper.toBookingDomain(bookingDB);
+        if (bookingDB != null) {
+            booking.setShopTable(shopTableMapper.toShopTableDomain(
+                    bookingDB.getBookingShopTableDB().getShopTableDB()));
+        }
+        return Optional.of(booking);
     }
 
     @Override
@@ -57,8 +51,27 @@ public class BookingRepository implements IBookingRepository {
 
     }
 
+    @Autowired
+    private ClientCrudRepository clientCrudRepository;
+
     @Override
     public Optional<Booking> save(Booking booking) {
-        return null;
+
+        BookingDB bookingDB = bookingMapper.toBookingDB(booking);
+        Booking responseBooking = bookingMapper.toBookingDomain(bookingCrudRepository.save(bookingDB));
+        if (responseBooking != null) {
+
+            BookingShopTableDB bookingShopTableDB = BookingShopTableDB.builder()
+                    .id(BookingShopTablePKDB.builder()
+                            .idTable(booking.getShopTable().getIdShopTable())
+                            .idBooking(booking.getIdBooking()).build())
+                    .shopTableDB(shopTableMapper.toShopTableDB(booking.getShopTable()))
+                    .bookingDB(bookingDB)
+                    .dayBooking(booking.getDayBooking())
+                    .status(booking.getStatus())
+                    .build();
+            bookingShopTableCrudRepository.save(bookingShopTableDB);
+        }
+        return Optional.ofNullable(responseBooking);
     }
 }

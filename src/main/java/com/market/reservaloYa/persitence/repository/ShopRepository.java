@@ -4,6 +4,7 @@ import com.market.reservaloYa.domain.Shop;
 import com.market.reservaloYa.domain.repository.IShopRepository;
 import com.market.reservaloYa.persitence.crud.OwnerShopCrudRepository;
 import com.market.reservaloYa.persitence.crud.ShopCrudRepository;
+import com.market.reservaloYa.persitence.crud.ShopTableCrudRepository;
 import com.market.reservaloYa.persitence.entity.ShopDB;
 import com.market.reservaloYa.persitence.mapper.ShopMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class ShopRepository implements IShopRepository {
     private OwnerShopCrudRepository ownerShopCrudRepository;
     @Autowired
     private ShopMapper shopMapper;
+    @Autowired
+    private ShopTableCrudRepository shopTableCrudRepository;
 
     @Override
     public List<Shop> getAll() {
@@ -37,10 +40,13 @@ public class ShopRepository implements IShopRepository {
         shopCrudRepository.delete(shopMapper.toShopDB(shop));
     }
 
+
     @Override
     public Optional<Shop> save(Shop shop) {
-        ShopDB saveShopDB = shopCrudRepository.save(shopMapper.toShopDB(shop));
-
-        return Optional.of(shopMapper.toShopDomain(saveShopDB));
+        Shop saveShop = null;
+        if (ownerShopCrudRepository.findById(shop.getOwnerShop().getIdOwnerShop()).isPresent()) {
+            saveShop = shopMapper.toShopDomain(shopCrudRepository.save(shopMapper.toShopDB(shop)));
+        }
+        return Optional.ofNullable(saveShop);
     }
 }

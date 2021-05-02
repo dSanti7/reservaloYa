@@ -2,29 +2,53 @@ package com.market.reservaloYa.persitence.mapper;
 
 import com.market.reservaloYa.domain.Shop;
 import com.market.reservaloYa.persitence.entity.ShopDB;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {OwnerShopMapper.class})
-public interface ShopMapper {
 
-    @Mappings({
-            @Mapping(source = "name", target = "name"),
-            @Mapping(source = "email", target = "email"),
-            @Mapping(source = "geographicalPosition", target = "geographicalPosition"),
-            @Mapping(source = "id", target = "idShop"),
-            @Mapping(source = "idOwner", target = "idOwnerShop"),
-            @Mapping(source = "phoneNumber", target = "phoneNumber"),
+@Component
+public class ShopMapper {
 
-    })
-    Shop toShopDomain(ShopDB shopDB);
+    @Autowired
+    private OwnerShopMapper ownerShopMapper;
+    @Autowired
+    private ShopTableMapper shopTableMapper;
 
-    List<Shop> toShopsDomain(List<ShopDB> shopDB);
+    public Shop toShopDomain(ShopDB shopDB) {
+        if (shopDB == null) return null;
+        return Shop.builder()
+                .phoneNumber(shopDB.getPhoneNumber())
+                .name(shopDB.getName())
+                .geographicalPosition(shopDB.getGeographicalPosition())
+                .email(shopDB.getEmail())
+                .idShop(shopDB.getId())
+                .ownerShop(ownerShopMapper.toOwnerShop(shopDB.getOwnerShopDB())).build();
 
-    @InheritInverseConfiguration
-    ShopDB toShopDB(Shop shop);
+    }
+
+    public List<Shop> toShopsDomain(List<ShopDB> shopsDB) {
+        if (shopsDB == null) return null;
+        return shopsDB.stream().map(this::toShopDomain).collect(Collectors.toList());
+    }
+
+    public ShopDB toShopDB(Shop shop) {
+        if (shop == null) return null;
+        return ShopDB.builder()
+                .email(shop.getEmail())
+                .geographicalPosition(shop.getGeographicalPosition())
+                .id(shop.getIdShop())
+                .idOwner(shop.getOwnerShop().getIdOwnerShop())
+                .name(shop.getName())
+                .ownerShopDB(ownerShopMapper.toOwnerShopDB(shop.getOwnerShop()))
+                .phoneNumber(shop.getPhoneNumber())
+                .shopTablesDB(shopTableMapper.toShopTablesDBS(shop.getShopTable())).build();
+    }
+
+    public List<ShopDB> toShopsDB(List<Shop> shops) {
+        if (shops == null) return null;
+        return shops.stream().map(this::toShopDB).collect(Collectors.toList());
+    }
 }

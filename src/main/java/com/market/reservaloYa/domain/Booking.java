@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Builder
@@ -19,7 +18,7 @@ public class Booking {
     private LocalDateTime dayBooking;
 
     private Client client;
-    private List<ShopTable> shopTables;
+    private ShopTable shopTable;
 
 
 }

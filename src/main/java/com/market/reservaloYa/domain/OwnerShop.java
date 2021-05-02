@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class OwnerShop {
     private String email;
     private String password;
 
+    private List<Shop> shops;
 }

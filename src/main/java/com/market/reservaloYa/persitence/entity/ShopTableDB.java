@@ -34,7 +34,7 @@ public class ShopTableDB {
     private ShopDB shopDB;
 
     @OneToMany
-    @JoinColumn(name = "shopTable")
+    @JoinColumn(name = "shopTableDB")
     private List<BookingShopTableDB> bookingShopTableDBS;
 
 }

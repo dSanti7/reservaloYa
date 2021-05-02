@@ -28,6 +28,6 @@ public class OwnerShopDB implements Serializable {
     private String password;
 
     @OneToMany(mappedBy = "ownerShopDB")
-    private List<ShopDB> shopDBS;
+    private List<ShopDB> shopsDB;
 
 }

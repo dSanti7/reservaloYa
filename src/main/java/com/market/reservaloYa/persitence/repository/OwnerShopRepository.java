@@ -3,6 +3,7 @@ package com.market.reservaloYa.persitence.repository;
 import com.market.reservaloYa.domain.OwnerShop;
 import com.market.reservaloYa.domain.repository.IOwnerShopRepository;
 import com.market.reservaloYa.persitence.crud.OwnerShopCrudRepository;
+import com.market.reservaloYa.persitence.crud.ShopCrudRepository;
 import com.market.reservaloYa.persitence.entity.OwnerShopDB;
 import com.market.reservaloYa.persitence.mapper.OwnerShopMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,17 @@ public class OwnerShopRepository implements IOwnerShopRepository {
     private OwnerShopCrudRepository ownerShopCrudRepository;
     @Autowired
     private OwnerShopMapper ownerShopMapper;
+    @Autowired
+    private ShopCrudRepository shopCrudRepository;
 
     @Override
     public List<OwnerShop> getAll() {
-        return ownerShopMapper.toOwnersShopDomain((List<OwnerShopDB>) ownerShopCrudRepository.findAll());
+        return ownerShopMapper.toOwnersShop((List<OwnerShopDB>) ownerShopCrudRepository.findAll());
     }
 
     @Override
     public Optional<OwnerShop> getById(Long id) {
-        return Optional.of(ownerShopMapper.toOwnerShopDomain(ownerShopCrudRepository.findById(id).orElse(null)));
+        return Optional.of(ownerShopMapper.toOwnerShop(ownerShopCrudRepository.findById(id).orElse(null)));
     }
 
     @Override
@@ -36,6 +39,9 @@ public class OwnerShopRepository implements IOwnerShopRepository {
 
     @Override
     public Optional<OwnerShop> save(OwnerShop ownerShop) {
-        return Optional.of(ownerShopMapper.toOwnerShopDomain(ownerShopCrudRepository.save(ownerShopMapper.toOwnerShopDB(ownerShop))));
+
+        OwnerShopDB ownerShopDB = ownerShopMapper.toOwnerShopDB(ownerShop);
+        ownerShopDB.setShopsDB(shopCrudRepository.findByIdOwner(ownerShop.getIdOwnerShop()));
+        return Optional.of(ownerShopMapper.toOwnerShop(ownerShopCrudRepository.save(ownerShopDB)));
     }
 }
