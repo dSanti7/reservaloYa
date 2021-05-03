@@ -2,6 +2,7 @@ package com.market.reservaloYa.persitence.mapper;
 
 import com.market.reservaloYa.domain.Shop;
 import com.market.reservaloYa.persitence.entity.ShopDB;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,8 @@ public class ShopMapper {
     @Autowired
     private ShopTableMapper shopTableMapper;
 
-    public Shop toShopDomain(ShopDB shopDB) {
-        if (shopDB == null) return null;
+    public Shop toShop(@NotNull ShopDB shopDB) {
+
         return Shop.builder()
                 .phoneNumber(shopDB.getPhoneNumber())
                 .name(shopDB.getName())
@@ -29,13 +30,13 @@ public class ShopMapper {
 
     }
 
-    public List<Shop> toShopsDomain(List<ShopDB> shopsDB) {
-        if (shopsDB == null) return null;
-        return shopsDB.stream().map(this::toShopDomain).collect(Collectors.toList());
+    public List<Shop> toShops(@NotNull List<ShopDB> shopsDB) {
+
+        return shopsDB.stream().map(this::toShop).collect(Collectors.toList());
     }
 
-    public ShopDB toShopDB(Shop shop) {
-        if (shop == null) return null;
+    public ShopDB toShopDB(@NotNull Shop shop) {
+
         return ShopDB.builder()
                 .email(shop.getEmail())
                 .geographicalPosition(shop.getGeographicalPosition())
@@ -44,11 +45,11 @@ public class ShopMapper {
                 .name(shop.getName())
                 .ownerShopDB(ownerShopMapper.toOwnerShopDB(shop.getOwnerShop()))
                 .phoneNumber(shop.getPhoneNumber())
-                .shopTablesDB(shopTableMapper.toShopTablesDBS(shop.getShopTable())).build();
+                .shopTablesDB(shopTableMapper.toShopTablesDB(shop.getShopTable())).build();
     }
 
-    public List<ShopDB> toShopsDB(List<Shop> shops) {
-        if (shops == null) return null;
+    public List<ShopDB> toShopsDB(@NotNull List<Shop> shops) {
+
         return shops.stream().map(this::toShopDB).collect(Collectors.toList());
     }
 }

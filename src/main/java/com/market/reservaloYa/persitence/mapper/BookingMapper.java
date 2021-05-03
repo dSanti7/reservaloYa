@@ -1,9 +1,11 @@
 package com.market.reservaloYa.persitence.mapper;
 
 import com.market.reservaloYa.domain.Booking;
+import com.market.reservaloYa.domain.ShopTable;
 import com.market.reservaloYa.persitence.entity.BookingDB;
 import com.market.reservaloYa.persitence.entity.BookingShopTableDB;
 import com.market.reservaloYa.persitence.entity.BookingShopTablePKDB;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,26 +20,27 @@ public class BookingMapper {
     @Autowired
     private ShopTableMapper shopTableMapper;
 
+    public Booking toBooking(@NotNull BookingDB bookingDB) {
 
-    public Booking toBookingDomain(BookingDB bookingDBEntity) {
-        if (bookingDBEntity == null) return null;
-        return Booking.builder().idBooking(bookingDBEntity.getId())
-                .status(bookingDBEntity.getBookingShopTableDB().getStatus())
-                .client(clientMapper.toClientDomain(bookingDBEntity.getClientDB()))
-                .people(bookingDBEntity.getPeople())
-                .dayBooking(bookingDBEntity.getBookingShopTableDB().getDayBooking())
-                .shopTable(shopTableMapper.toShopTableDomain(bookingDBEntity.getBookingShopTableDB().getShopTableDB()))
+        return Booking.builder().idBooking(bookingDB.getId())
+                .status(bookingDB.getBookingShopTableDB().getStatus())
+                .client(clientMapper.toClient(bookingDB.getClientDB()))
+                .people(bookingDB.getPeople())
+                .dayBooking(bookingDB.getBookingShopTableDB().getDayBooking())
+                .shopTable(shopTableMapper.toShopTable(bookingDB.getBookingShopTableDB().getShopTableDB()))
                 .build();
     }
 
-    public List<Booking> toBookingsDomain(List<BookingDB> bookingsDB) {
-        if (bookingsDB == null) return null;
-        return bookingsDB.stream().map(this::toBookingDomain).collect(Collectors.toList());
+    public List<Booking> toBookings(@NotNull List<BookingDB> bookingsDB) {
+
+        return bookingsDB.stream().map(this::toBooking).collect(Collectors.toList());
     }
 
-    public BookingDB toBookingDB(Booking booking) {
-        if (booking == null) return null;
-        return BookingDB.builder().people(booking.getPeople()).idTable(booking.getShopTable().getIdShopTable())
+    public BookingDB toBookingDB(@NotNull Booking booking) {
+
+        return BookingDB.builder()
+                .people(booking.getPeople())
+                .idTable(booking.getShopTable().getIdShopTable())
                 .idClient(booking.getClient().getIdClient())
                 .id(booking.getIdBooking())
                 .clientDB(clientMapper.toClientDB(booking.getClient()))
@@ -45,8 +48,7 @@ public class BookingMapper {
                 .build();
     }
 
-    public BookingShopTableDB getBookingShopTableDBByBooking(Booking booking) {
-        if (booking == null) return null;
+    public BookingShopTableDB getBookingShopTableDBByBooking(@NotNull Booking booking) {
         return BookingShopTableDB.builder()
                 .id(getBookingShopTablePKDBByBooking(booking))
                 .status(booking.getStatus())
@@ -55,15 +57,14 @@ public class BookingMapper {
                 .shopTableDB(shopTableMapper.toShopTableDB(booking.getShopTable())).build();
     }
 
-    private BookingShopTablePKDB getBookingShopTablePKDBByBooking(Booking booking) {
-        if (booking == null) return null;
+    private BookingShopTablePKDB getBookingShopTablePKDBByBooking(@NotNull Booking booking) {
         return BookingShopTablePKDB.builder()
                 .idBooking(booking.getIdBooking())
                 .idTable(booking.getShopTable().getIdShopTable()).build();
     }
 
-    public List<BookingDB> toBookingsDB(List<Booking> bookings) {
-        if (bookings == null) return null;
+    public List<BookingDB> toBookingsDB(@NotNull List<Booking> bookings) {
+
         return bookings.stream().map(this::toBookingDB).collect(Collectors.toList());
     }
 }

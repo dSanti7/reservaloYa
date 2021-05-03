@@ -10,6 +10,7 @@ import com.market.reservaloYa.persitence.entity.BookingShopTableDB;
 import com.market.reservaloYa.persitence.entity.BookingShopTablePKDB;
 import com.market.reservaloYa.persitence.mapper.BookingMapper;
 import com.market.reservaloYa.persitence.mapper.ShopTableMapper;
+import com.sun.istack.internal.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,10 +21,11 @@ import java.util.Optional;
 public class BookingRepository implements IBookingRepository {
 
     @Autowired
-    private BookingCrudRepository bookingCrudRepository;
-
+    private ClientCrudRepository clientCrudRepository;
     @Autowired
-    private BookingShopTableCrudRepository bookingShopTableCrudRepository;
+    private BookingCrudRepository bookingCrudRepository;
+    @Autowired
+    private BookingShopTableRepository bookingShopTableRepository;
     @Autowired
     private BookingMapper bookingMapper;
     @Autowired
@@ -31,47 +33,42 @@ public class BookingRepository implements IBookingRepository {
 
     @Override
     public List<Booking> getAll() {
-        return bookingMapper.toBookingsDomain((List<BookingDB>) bookingCrudRepository.findAll());
-
+        return bookingMapper.toBookings((List<BookingDB>) bookingCrudRepository.findAll());
     }
 
     @Override
     public Optional<Booking> getById(Long id) {
-        BookingDB bookingDB = bookingCrudRepository.findById(id).orElse(null);
-        Booking booking = bookingMapper.toBookingDomain(bookingDB);
-        if (bookingDB != null) {
-            booking.setShopTable(shopTableMapper.toShopTableDomain(
-                    bookingDB.getBookingShopTableDB().getShopTableDB()));
-        }
-        return Optional.of(booking);
+        Optional<BookingDB> bookingDB = bookingCrudRepository.findById(id);
+        return bookingDB.map(db -> bookingMapper.toBooking(db));
     }
 
     @Override
-    public void delete(Booking booking) {
-
+    public void delete(@NotNull Booking booking) {
+        bookingCrudRepository.delete(bookingMapper.toBookingDB(booking));
     }
 
-    @Autowired
-    private ClientCrudRepository clientCrudRepository;
-
     @Override
-    public Optional<Booking> save(Booking booking) {
+    public Optional<Booking> save(@NotNull Booking booking) {
 
         BookingDB bookingDB = bookingMapper.toBookingDB(booking);
-        Booking responseBooking = bookingMapper.toBookingDomain(bookingCrudRepository.save(bookingDB));
+        Booking responseBooking = bookingMapper.toBooking(bookingCrudRepository.save(bookingDB));
         if (responseBooking != null) {
-
-            BookingShopTableDB bookingShopTableDB = BookingShopTableDB.builder()
-                    .id(BookingShopTablePKDB.builder()
-                            .idTable(booking.getShopTable().getIdShopTable())
-                            .idBooking(booking.getIdBooking()).build())
-                    .shopTableDB(shopTableMapper.toShopTableDB(booking.getShopTable()))
-                    .bookingDB(bookingDB)
-                    .dayBooking(booking.getDayBooking())
-                    .status(booking.getStatus())
-                    .build();
-            bookingShopTableCrudRepository.save(bookingShopTableDB);
+            saveBookingShopTable(booking, bookingDB);
         }
         return Optional.ofNullable(responseBooking);
+    }
+
+    private void saveBookingShopTable(Booking booking, BookingDB bookingDB) {
+        BookingShopTableDB bookingShopTableDB = BookingShopTableDB.builder()
+                .id(BookingShopTablePKDB.builder()
+                        .idTable(booking.getShopTable().getIdShopTable())
+                        .idBooking(booking.getIdBooking()).build())
+                .shopTableDB(shopTableMapper.toShopTableDB(booking.getShopTable()))
+                .bookingDB(bookingDB)
+                .dayBooking(booking.getDayBooking())
+                .status(booking.getStatus())
+                .build();
+        bookingShopTableRepository.save(bookingShopTableDB);
+        //todo: cuidado cuando no se haya guardado bookingShopTable
     }
 }

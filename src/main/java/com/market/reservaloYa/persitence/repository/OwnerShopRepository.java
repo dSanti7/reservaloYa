@@ -29,7 +29,8 @@ public class OwnerShopRepository implements IOwnerShopRepository {
 
     @Override
     public Optional<OwnerShop> getById(Long id) {
-        return Optional.of(ownerShopMapper.toOwnerShop(ownerShopCrudRepository.findById(id).orElse(null)));
+        Optional<OwnerShopDB> ownerShopDB = ownerShopCrudRepository.findById(id);
+        return ownerShopDB.map(db -> ownerShopMapper.toOwnerShop(db));
     }
 
     @Override
@@ -39,9 +40,6 @@ public class OwnerShopRepository implements IOwnerShopRepository {
 
     @Override
     public Optional<OwnerShop> save(OwnerShop ownerShop) {
-
-        OwnerShopDB ownerShopDB = ownerShopMapper.toOwnerShopDB(ownerShop);
-        ownerShopDB.setShopsDB(shopCrudRepository.findByIdOwner(ownerShop.getIdOwnerShop()));
-        return Optional.of(ownerShopMapper.toOwnerShop(ownerShopCrudRepository.save(ownerShopDB)));
+        return Optional.of(ownerShopMapper.toOwnerShop(ownerShopCrudRepository.save(ownerShopMapper.toOwnerShopDB(ownerShop))));
     }
 }

@@ -21,22 +21,6 @@ public class ShopTableRepository implements IShopTableRepository {
     private ShopTableCrudRepository shopTableCrudRepository;
     @Autowired
     private ShopTableMapper shopTableMapper;
-
-    @Override
-    public List<ShopTable> getAll() {
-        return shopTableMapper.toShopTablesDomain((List<ShopTableDB>) shopTableCrudRepository.findAll());
-    }
-
-    @Override
-    public Optional<ShopTable> getById(Long id) {
-        return Optional.of(shopTableMapper.toShopTableDomain(shopTableCrudRepository.findById(id).orElse(null)));
-    }
-
-    @Override
-    public void delete(ShopTable shopTable) {
-        shopTableCrudRepository.delete(shopTableMapper.toShopTableDB(shopTable));
-    }
-
     @Autowired
     private ShopCrudRepository shopCrudRepository;
 
@@ -44,14 +28,28 @@ public class ShopTableRepository implements IShopTableRepository {
     private BookingShopTableCrudRepository bookingShopTableCrudRepository;
 
     @Override
+    public List<ShopTable> getAll() {
+        return shopTableMapper.toShopTables((List<ShopTableDB>) shopTableCrudRepository.findAll());
+    }
+
+    @Override
+    public Optional<ShopTable> getById(Long id) {
+        Optional<ShopTableDB> shopTableDB = shopTableCrudRepository.findById(id);
+        return shopTableDB.map(db -> shopTableMapper.toShopTable(db));
+    }
+
+    @Override
+    public void delete(ShopTable shopTable) {
+        shopTableCrudRepository.delete(shopTableMapper.toShopTableDB(shopTable));
+    }
+
+    @Override
     public Optional<ShopTable> save(ShopTable shopTable) {
         ShopTable responseShopTable = null;
-        ShopDB shopDB = shopCrudRepository.findById(shopTable.getIdShop()).orElse(null);
-        if (shopDB != null) {
+        Optional<ShopDB> shopDB = shopCrudRepository.findById(shopTable.getIdShop());
+        if (shopDB.isPresent()) {
             ShopTableDB shopTableDB = shopTableMapper.toShopTableDB(shopTable);
-            shopTableDB.setShopDB(shopDB);
-            shopTableDB.setBookingShopTableDBS(bookingShopTableCrudRepository.findByIdTable(shopTable.getIdShopTable()));
-            responseShopTable = shopTableMapper.toShopTableDomain(shopTableCrudRepository.save(shopTableDB));
+            responseShopTable = shopTableMapper.toShopTable(shopTableCrudRepository.save(shopTableDB));
         }
         return Optional.ofNullable(responseShopTable);
     }

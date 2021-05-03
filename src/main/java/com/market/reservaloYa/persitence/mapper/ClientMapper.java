@@ -4,7 +4,7 @@ import com.market.reservaloYa.domain.Client;
 import com.market.reservaloYa.persitence.entity.ClientDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import com.sun.istack.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,8 +13,8 @@ public class ClientMapper {
     @Autowired
     private BookingMapper bookingMapper;
 
-    public Client toClientDomain(ClientDB clientDB) {
-        if (clientDB == null) return null;
+    public Client toClient(@NotNull ClientDB clientDB) {
+
         return Client.builder()
                 .idClient(clientDB.getId())
                 .email(clientDB.getEmail())
@@ -22,21 +22,21 @@ public class ClientMapper {
                 .name(clientDB.getName())
                 .password(clientDB.getPassword())
                 .phoneNumber(clientDB.getPhoneNumber())
-                .bookings(bookingMapper.toBookingsDomain(clientDB.getBookingDBS()))
+                .bookings(bookingMapper.toBookings(clientDB.getBookingsDB()))
                 .build();
     }
 
 
-    public List<Client> toClientsDomain(List<ClientDB> clientsDB) {
-        if (clientsDB == null) return null;
-        return clientsDB.stream().map(this::toClientDomain).collect(Collectors.toList());
+    public List<Client> toClients(@NotNull List<ClientDB> clientsDB) {
+
+        return clientsDB.stream().map(this::toClient).collect(Collectors.toList());
     }
 
 
-    public ClientDB toClientDB(Client client) {
-        if (client == null) return null;
+    public ClientDB toClientDB(@NotNull Client client) {
+
         return ClientDB.builder()
-                .bookingDBS(bookingMapper.toBookingsDB(client.getBookings()))
+                .bookingsDB(bookingMapper.toBookingsDB(client.getBookings()))
                 .email(client.getEmail())
                 .id(client.getIdClient())
                 .lastName(client.getLastName())
@@ -45,8 +45,8 @@ public class ClientMapper {
                 .phoneNumber(client.getPhoneNumber()).build();
     }
 
-    public List<ClientDB> toClientsDB(List<Client> clients) {
-        if (clients == null) return null;
+    public List<ClientDB> toClientsDB(@NotNull List<Client> clients) {
+
         return clients.stream().map(this::toClientDB).collect(Collectors.toList());
     }
 }

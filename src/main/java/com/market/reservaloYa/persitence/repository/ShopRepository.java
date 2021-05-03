@@ -27,12 +27,13 @@ public class ShopRepository implements IShopRepository {
 
     @Override
     public List<Shop> getAll() {
-        return shopMapper.toShopsDomain((List<ShopDB>) shopCrudRepository.findAll());
+        return shopMapper.toShops((List<ShopDB>) shopCrudRepository.findAll());
     }
 
     @Override
     public Optional<Shop> getById(Long id) {
-        return Optional.of(shopMapper.toShopDomain(shopCrudRepository.findById(id).orElse(null)));
+        Optional<ShopDB> shopDB = shopCrudRepository.findById(id);
+        return shopDB.map(db -> shopMapper.toShop(db));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ShopRepository implements IShopRepository {
     public Optional<Shop> save(Shop shop) {
         Shop saveShop = null;
         if (ownerShopCrudRepository.findById(shop.getOwnerShop().getIdOwnerShop()).isPresent()) {
-            saveShop = shopMapper.toShopDomain(shopCrudRepository.save(shopMapper.toShopDB(shop)));
+            saveShop = shopMapper.toShop(shopCrudRepository.save(shopMapper.toShopDB(shop)));
         }
         return Optional.ofNullable(saveShop);
     }

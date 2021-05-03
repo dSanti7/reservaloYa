@@ -21,13 +21,13 @@ public class ClientRepository implements IClientRepository {
 
     @Override
     public List<Client> getAll() {
-
-        return clientMapper.toClientsDomain((List<ClientDB>) clientCrudRepository.findAll());
+        return clientMapper.toClients((List<ClientDB>) clientCrudRepository.findAll());
     }
 
     @Override
     public Optional<Client> getById(Long id) {
-        return Optional.of(clientMapper.toClientDomain(clientCrudRepository.findById(id).orElse(null)));
+        Optional<ClientDB> clientDB = clientCrudRepository.findById(id);
+        return clientDB.map(db -> clientMapper.toClient(db));
     }
 
     @Override
@@ -37,6 +37,6 @@ public class ClientRepository implements IClientRepository {
 
     @Override
     public Optional<Client> save(Client client) {
-        return Optional.of(clientMapper.toClientDomain(clientCrudRepository.save(clientMapper.toClientDB(client))));
+        return Optional.of(clientMapper.toClient(clientCrudRepository.save(clientMapper.toClientDB(client))));
     }
 }
