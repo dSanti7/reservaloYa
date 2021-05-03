@@ -20,8 +20,8 @@ public class ShopTableMapper {
     private ShopMapper shopMapper;
 
     public ShopTable toShopTable(@NotNull ShopTableDB shopTableDB) {
-
-        return ShopTable.builder().idShopTable(shopTableDB.getId())
+        return ShopTable.builder()
+                .idShopTable(shopTableDB.getId())
                 .idShop(shopTableDB.getIdShop())
                 .maxPeople(shopTableDB.getMaxPeople())
                 .minPeople(shopTableDB.getMinPeople())
@@ -30,12 +30,10 @@ public class ShopTableMapper {
     }
 
     public List<ShopTable> toShopTables(@NotNull List<ShopTableDB> shopTableDB) {
-
         return shopTableDB.stream().map(this::toShopTable).collect(Collectors.toList());
     }
 
     public ShopTableDB toShopTableDB(@NotNull ShopTable shopTable) {
-
         return ShopTableDB.builder()
                 .bookingShopTablesDB(getBookingShopTablesDBByShopTable(shopTable))
                 .id(shopTable.getIdShopTable())
@@ -55,7 +53,6 @@ public class ShopTableMapper {
     }
 
     public List<ShopTableDB> toShopTablesDB(@NotNull List<ShopTable> shopTables) {
-        if (shopTables == null) return null;
         return shopTables.stream().map(this::toShopTableDB).collect(Collectors.toList());
     }
 }

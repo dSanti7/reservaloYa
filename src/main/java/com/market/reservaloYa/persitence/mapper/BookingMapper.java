@@ -22,7 +22,8 @@ public class BookingMapper {
 
     public Booking toBooking(@NotNull BookingDB bookingDB) {
 
-        return Booking.builder().idBooking(bookingDB.getId())
+        return Booking.builder()
+                .idBooking(bookingDB.getId())
                 .status(bookingDB.getBookingShopTableDB().getStatus())
                 .client(clientMapper.toClient(bookingDB.getClientDB()))
                 .people(bookingDB.getPeople())

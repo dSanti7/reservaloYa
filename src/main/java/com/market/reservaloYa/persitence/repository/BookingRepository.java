@@ -10,7 +10,7 @@ import com.market.reservaloYa.persitence.entity.BookingShopTableDB;
 import com.market.reservaloYa.persitence.entity.BookingShopTablePKDB;
 import com.market.reservaloYa.persitence.mapper.BookingMapper;
 import com.market.reservaloYa.persitence.mapper.ShopTableMapper;
-import com.sun.istack.internal.NotNull;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

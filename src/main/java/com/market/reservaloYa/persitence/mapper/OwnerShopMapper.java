@@ -1,7 +1,9 @@
 package com.market.reservaloYa.persitence.mapper;
 
 import com.market.reservaloYa.domain.OwnerShop;
+import com.market.reservaloYa.domain.Shop;
 import com.market.reservaloYa.persitence.entity.OwnerShopDB;
+import com.market.reservaloYa.persitence.entity.ShopDB;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,8 +24,15 @@ public class OwnerShopMapper {
                 .name(ownerShopDB.getName())
                 .password(ownerShopDB.getPassword())
                 .phoneNumber(ownerShopDB.getPhoneNumber())
-                .shops(shopMapper.toShops(ownerShopDB.getShopsDB()))
+                .shops(getShopsByOwnerShopDB(ownerShopDB))
                 .build();
+    }
+
+    private List<Shop> getShopsByOwnerShopDB(OwnerShopDB ownerShopDB) {
+        if(ownerShopDB.getShopsDB().isEmpty()){
+            return null;
+        }
+        return shopMapper.toShops(ownerShopDB.getShopsDB());
     }
 
     public List<OwnerShop> toOwnersShop(@NotNull List<OwnerShopDB> ownersShopDB) {
@@ -37,8 +46,15 @@ public class OwnerShopMapper {
                 .lastName(ownerShop.getLastName()).name(ownerShop.getName())
                 .password(ownerShop.getPassword())
                 .phoneNumber(ownerShop.getPhoneNumber())
-                .shopsDB(shopMapper.toShopsDB(ownerShop.getShops()))
+                .shopsDB(getShopsDBByOwnerShop(ownerShop))
                 .build();
+    }
+
+    private List<ShopDB> getShopsDBByOwnerShop(OwnerShop ownerShop) {
+        if(ownerShop.getShops().isEmpty()){
+            return null;
+        }
+        return shopMapper.toShopsDB(ownerShop.getShops());
     }
 
     public List<OwnerShopDB> toOwnersShopDB(@NotNull List<OwnerShop> ownerShops) {
