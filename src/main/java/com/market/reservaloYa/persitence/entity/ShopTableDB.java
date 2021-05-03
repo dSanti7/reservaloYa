@@ -1,14 +1,12 @@
 package com.market.reservaloYa.persitence.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @Entity
 @AllArgsConstructor
@@ -35,6 +33,6 @@ public class ShopTableDB {
 
     @OneToMany
     @JoinColumn(name = "shopTableDB")
-    private List<BookingShopTableDB> bookingShopTableDBS;
+    private List<BookingShopTableDB> bookingShopTablesDB;
 
 }

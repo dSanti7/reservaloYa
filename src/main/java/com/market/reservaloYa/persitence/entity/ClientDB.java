@@ -1,20 +1,19 @@
 package com.market.reservaloYa.persitence.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "clients")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class ClientDB implements Serializable {
 
     @Id
@@ -29,7 +28,7 @@ public class ClientDB implements Serializable {
     private String password;
 
     @OneToMany(mappedBy = "clientDB")
-    private List<BookingDB> bookingDBS;
+    private List<BookingDB> bookingsDB;
 
 }
 

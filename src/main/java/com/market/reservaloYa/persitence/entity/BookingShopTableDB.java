@@ -1,16 +1,14 @@
 package com.market.reservaloYa.persitence.entity;
 
 import com.market.reservaloYa.constants.Status;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,7 +26,7 @@ public class BookingShopTableDB {
     @JoinColumn(name = "id_table", updatable = false, insertable = false)
     private ShopTableDB shopTableDB;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_booking", insertable = false, updatable = false)
     private BookingDB bookingDB;
 
