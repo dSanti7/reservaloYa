@@ -1,9 +1,7 @@
 package com.market.reservaloYa.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import java.util.List;
 
@@ -18,7 +16,8 @@ public class Shop {
     private String geographicalPosition;
     private String phoneNumber;
     private String email;
-    private OwnerShop ownerShop;
+    private Long idOwnerShop;
+
 
     private List<ShopTable> shopTable;
 }

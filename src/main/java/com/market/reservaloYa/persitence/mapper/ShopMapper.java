@@ -8,6 +8,7 @@ import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,13 +28,14 @@ public class ShopMapper {
                 .geographicalPosition(shopDB.getGeographicalPosition())
                 .email(shopDB.getEmail())
                 .idShop(shopDB.getId())
+                .idOwnerShop(shopDB.getIdOwner())
                 .shopTable(getShopTableByShopDB(shopDB))
-                .ownerShop(ownerShopMapper.toOwnerShop(shopDB.getOwnerShopDB())).build();
+                .build();
 
     }
 
     private List<ShopTable> getShopTableByShopDB(ShopDB shopDB) {
-        if (shopDB.getShopTablesDB().isEmpty()) {
+        if (shopDB.getShopTablesDB() == null || shopDB.getShopTablesDB().isEmpty()) {
             return null;
         }
         return shopTableMapper.toShopTables(shopDB.getShopTablesDB());
@@ -48,18 +50,10 @@ public class ShopMapper {
                 .email(shop.getEmail())
                 .geographicalPosition(shop.getGeographicalPosition())
                 .id(shop.getIdShop())
-                .idOwner(shop.getOwnerShop().getIdOwnerShop())
+                .idOwner(shop.getIdOwnerShop())
                 .name(shop.getName())
-                .ownerShopDB(ownerShopMapper.toOwnerShopDB(shop.getOwnerShop()))
-                .phoneNumber(shop.getPhoneNumber())
-                .shopTablesDB(getShopTablesDBByShop(shop)).build();
-    }
+                .phoneNumber(shop.getPhoneNumber()).build();
 
-    private List<ShopTableDB> getShopTablesDBByShop(Shop shop) {
-        if (shop.getShopTable().isEmpty()) {
-            return null;
-        }
-        return shopTableMapper.toShopTablesDB(shop.getShopTable());
     }
 
     public List<ShopDB> toShopsDB(@NotNull List<Shop> shops) {

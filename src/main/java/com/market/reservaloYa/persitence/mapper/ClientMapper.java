@@ -25,17 +25,9 @@ public class ClientMapper {
                 .name(clientDB.getName())
                 .password(clientDB.getPassword())
                 .phoneNumber(clientDB.getPhoneNumber())
-                .bookings(getBookingsByClientDB(clientDB))
+             //   .bookings(getBookingsByClientDB(clientDB))
                 .build();
     }
-
-    private List<Booking> getBookingsByClientDB(ClientDB clientDB) {
-        if (clientDB.getBookingsDB().isEmpty()) {
-            return null;
-        }
-        return bookingMapper.toBookings(clientDB.getBookingsDB());
-    }
-
 
     public List<Client> toClients(@NotNull List<ClientDB> clientsDB) {
 
@@ -46,20 +38,13 @@ public class ClientMapper {
     public ClientDB toClientDB(@NotNull Client client) {
 
         return ClientDB.builder()
-                .bookingsDB(getBookingsDBByClient(client))
+//                .bookingsDB(getBookingsDBByClient(client))
                 .email(client.getEmail())
                 .id(client.getIdClient())
                 .lastName(client.getLastName())
                 .name(client.getName())
                 .password(client.getPassword())
                 .phoneNumber(client.getPhoneNumber()).build();
-    }
-
-    private List<BookingDB> getBookingsDBByClient(Client client) {
-        if (client.getBookings().isEmpty()) {
-            return null;
-        }
-        return bookingMapper.toBookingsDB(client.getBookings());
     }
 
     public List<ClientDB> toClientsDB(@NotNull List<Client> clients) {

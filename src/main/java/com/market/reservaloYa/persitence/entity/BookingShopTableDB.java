@@ -23,7 +23,7 @@ public class BookingShopTableDB {
     private LocalDateTime dayBooking;
 
     @ManyToOne
-    @JoinColumn(name = "id_table", updatable = false, insertable = false)
+    @JoinColumn(name = "id_table", insertable = false, updatable = false)
     private ShopTableDB shopTableDB;
 
     @OneToOne

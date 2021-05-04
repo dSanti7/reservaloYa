@@ -45,7 +45,7 @@ public class ShopRepository implements IShopRepository {
     @Override
     public Optional<Shop> save(Shop shop) {
         Shop saveShop = null;
-        if (ownerShopCrudRepository.findById(shop.getOwnerShop().getIdOwnerShop()).isPresent()) {
+        if (ownerShopCrudRepository.findById(shop.getIdOwnerShop()).isPresent()) {
             saveShop = shopMapper.toShop(shopCrudRepository.save(shopMapper.toShopDB(shop)));
         }
         return Optional.ofNullable(saveShop);

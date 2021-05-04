@@ -24,15 +24,8 @@ public class OwnerShopMapper {
                 .name(ownerShopDB.getName())
                 .password(ownerShopDB.getPassword())
                 .phoneNumber(ownerShopDB.getPhoneNumber())
-                .shops(getShopsByOwnerShopDB(ownerShopDB))
+               // .shops(getShopsByOwnerShopDB(ownerShopDB))
                 .build();
-    }
-
-    private List<Shop> getShopsByOwnerShopDB(OwnerShopDB ownerShopDB) {
-        if(ownerShopDB.getShopsDB().isEmpty()){
-            return null;
-        }
-        return shopMapper.toShops(ownerShopDB.getShopsDB());
     }
 
     public List<OwnerShop> toOwnersShop(@NotNull List<OwnerShopDB> ownersShopDB) {
@@ -46,19 +39,11 @@ public class OwnerShopMapper {
                 .lastName(ownerShop.getLastName()).name(ownerShop.getName())
                 .password(ownerShop.getPassword())
                 .phoneNumber(ownerShop.getPhoneNumber())
-                .shopsDB(getShopsDBByOwnerShop(ownerShop))
+             //   .shopsDB(getShopsDBByOwnerShop(ownerShop))
                 .build();
     }
 
-    private List<ShopDB> getShopsDBByOwnerShop(OwnerShop ownerShop) {
-        if(ownerShop.getShops().isEmpty()){
-            return null;
-        }
-        return shopMapper.toShopsDB(ownerShop.getShops());
-    }
-
     public List<OwnerShopDB> toOwnersShopDB(@NotNull List<OwnerShop> ownerShops) {
-
         return ownerShops.stream().map(this::toOwnerShopDB).collect(Collectors.toList());
     }
 

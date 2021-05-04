@@ -41,12 +41,14 @@ public class ShopTableMapper {
                 .maxPeople(shopTable.getMaxPeople())
                 .minPeople(shopTable.getMinPeople())
                 .positionShop(shopTable.getPositionShop())
-                .shopDB(shopMapper.toShopDB(shopTable.getShop()))
+                //.shopDB(shopMapper.toShopDB(shopTable.getShop()))
                 .build();
     }
 
     private List<BookingShopTableDB> getBookingShopTablesDBByShopTable(ShopTable shopTable) {
-        if (shopTable.getBookings().isEmpty()) return null;
+        if (shopTable.getBookings() == null || shopTable.getBookings().isEmpty()){
+            return null;
+        }
         return shopTable.getBookings().stream()
                 .map(booking -> bookingMapper.getBookingShopTableDBByBooking(booking))
                 .collect(Collectors.toList());

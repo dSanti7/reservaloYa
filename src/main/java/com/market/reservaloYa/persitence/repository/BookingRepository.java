@@ -3,7 +3,6 @@ package com.market.reservaloYa.persitence.repository;
 import com.market.reservaloYa.domain.Booking;
 import com.market.reservaloYa.domain.repository.IBookingRepository;
 import com.market.reservaloYa.persitence.crud.BookingCrudRepository;
-import com.market.reservaloYa.persitence.crud.BookingShopTableCrudRepository;
 import com.market.reservaloYa.persitence.crud.ClientCrudRepository;
 import com.market.reservaloYa.persitence.entity.BookingDB;
 import com.market.reservaloYa.persitence.entity.BookingShopTableDB;
@@ -33,7 +32,8 @@ public class BookingRepository implements IBookingRepository {
 
     @Override
     public List<Booking> getAll() {
-        return bookingMapper.toBookings((List<BookingDB>) bookingCrudRepository.findAll());
+
+        return bookingMapper.toBookings((List<BookingDB>) bookingCrudRepository.findAll(), bookingShopTableRepository.findAll());
     }
 
     @Override
@@ -50,25 +50,24 @@ public class BookingRepository implements IBookingRepository {
     @Override
     public Optional<Booking> save(@NotNull Booking booking) {
 
-        BookingDB bookingDB = bookingMapper.toBookingDB(booking);
-        Booking responseBooking = bookingMapper.toBooking(bookingCrudRepository.save(bookingDB));
-        if (responseBooking != null) {
-            saveBookingShopTable(booking, bookingDB);
-        }
+        BookingDB bookingDB = bookingCrudRepository.save(bookingMapper.toBookingDB(booking));
+        BookingShopTableDB bookingShopTableDB = saveBookingShopTable(booking, bookingDB);
+
+        bookingDB.setBookingShopTableDB(bookingShopTableDB);
+
+        Booking responseBooking = bookingMapper.toBooking(bookingDB);
         return Optional.ofNullable(responseBooking);
     }
 
-    private void saveBookingShopTable(Booking booking, BookingDB bookingDB) {
+    private BookingShopTableDB saveBookingShopTable(Booking booking, BookingDB bookingDB) {
         BookingShopTableDB bookingShopTableDB = BookingShopTableDB.builder()
                 .id(BookingShopTablePKDB.builder()
-                        .idTable(booking.getShopTable().getIdShopTable())
-                        .idBooking(booking.getIdBooking()).build())
-                .shopTableDB(shopTableMapper.toShopTableDB(booking.getShopTable()))
-                .bookingDB(bookingDB)
+                        .idTable(booking.getIdShopTable())
+                        .idBooking(bookingDB.getId()).build())
                 .dayBooking(booking.getDayBooking())
                 .status(booking.getStatus())
                 .build();
-        bookingShopTableRepository.save(bookingShopTableDB);
+        return bookingShopTableRepository.save(bookingShopTableDB).orElse(null);
         //todo: cuidado cuando no se haya guardado bookingShopTable
     }
 }

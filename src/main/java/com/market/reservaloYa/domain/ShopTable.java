@@ -1,9 +1,8 @@
 package com.market.reservaloYa.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import java.util.List;
 
@@ -20,5 +19,5 @@ public class ShopTable {
     private Short minPeople;
 
     private List<Booking> bookings;
-    private Shop shop;
+
 }
