@@ -1,9 +1,7 @@
 package com.market.reservaloYa.persitence.mapper;
 
 import com.market.reservaloYa.domain.OwnerShop;
-import com.market.reservaloYa.domain.Shop;
 import com.market.reservaloYa.persitence.entity.OwnerShopDB;
-import com.market.reservaloYa.persitence.entity.ShopDB;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +18,8 @@ public class OwnerShopMapper {
     public OwnerShop toOwnerShop(@NotNull OwnerShopDB ownerShopDB) {
 
         return OwnerShop.builder()
-                .email(ownerShopDB.getEmail()).idOwnerShop(ownerShopDB.getId()).lastName(ownerShopDB.getLastName())
+                .email(ownerShopDB.getEmail())
+                .lastName(ownerShopDB.getLastName())
                 .name(ownerShopDB.getName())
                 .password(ownerShopDB.getPassword())
                 .phoneNumber(ownerShopDB.getPhoneNumber())
@@ -35,8 +34,9 @@ public class OwnerShopMapper {
 
     public OwnerShopDB toOwnerShopDB(@NotNull OwnerShop ownerShop) {
 
-        return OwnerShopDB.builder().email(ownerShop.getEmail()).id(ownerShop.getIdOwnerShop())
-                .lastName(ownerShop.getLastName()).name(ownerShop.getName())
+        return OwnerShopDB.builder().email(ownerShop.getEmail())
+                .lastName(ownerShop.getLastName())
+                .name(ownerShop.getName())
                 .password(ownerShop.getPassword())
                 .phoneNumber(ownerShop.getPhoneNumber())
              //   .shopsDB(getShopsDBByOwnerShop(ownerShop))

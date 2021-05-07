@@ -21,7 +21,6 @@ public class ShopTableMapper {
 
     public ShopTable toShopTable(@NotNull ShopTableDB shopTableDB) {
         return ShopTable.builder()
-                .idShopTable(shopTableDB.getId())
                 .idShop(shopTableDB.getIdShop())
                 .maxPeople(shopTableDB.getMaxPeople())
                 .minPeople(shopTableDB.getMinPeople())
@@ -36,7 +35,6 @@ public class ShopTableMapper {
     public ShopTableDB toShopTableDB(@NotNull ShopTable shopTable) {
         return ShopTableDB.builder()
                 .bookingShopTablesDB(getBookingShopTablesDBByShopTable(shopTable))
-                .id(shopTable.getIdShopTable())
                 .idShop(shopTable.getIdShop())
                 .maxPeople(shopTable.getMaxPeople())
                 .minPeople(shopTable.getMinPeople())

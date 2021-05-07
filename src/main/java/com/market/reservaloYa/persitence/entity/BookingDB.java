@@ -1,6 +1,5 @@
 package com.market.reservaloYa.persitence.entity;
 
-import com.market.reservaloYa.domain.ShopTable;
 import lombok.*;
 
 import javax.persistence.*;

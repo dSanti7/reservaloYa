@@ -31,7 +31,7 @@ public class BookingController {
 
     })
     public ResponseEntity<Booking> creteBooking(@RequestBody Booking booking) {
-        if (booking == null || (booking.getIdBooking() != null && bookingService.getBookingById(booking.getIdBooking()).isPresent())) {
+        if (booking == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Booking responseBooking = bookingService.saveBooking(booking).orElse(null);
@@ -43,7 +43,7 @@ public class BookingController {
 
     @GetMapping("/id/{id}")
     @ApiResponses({
-            @ApiResponse(code = 200,message = "Booking has been found"),
+            @ApiResponse(code = 200, message = "Booking has been found"),
             @ApiResponse(code = 404, message = "Booking has not been found"),
             @ApiResponse(code = 400, message = "Error in the parameters")
     })

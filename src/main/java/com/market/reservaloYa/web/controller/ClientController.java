@@ -41,7 +41,7 @@ public class ClientController {
             @ApiResponse(code = 404, message = "Client has not been found")
     })
     public ResponseEntity<Client> creteClient(@RequestBody Client client) {
-        if (client == null || (client.getIdClient() != null && clientService.getClientById(client.getIdClient()).isPresent())) {
+        if (client == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Client responseClient = clientService.saveClient(client).orElse(null);

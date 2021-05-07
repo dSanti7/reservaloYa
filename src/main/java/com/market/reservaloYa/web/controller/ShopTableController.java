@@ -36,12 +36,12 @@ public class ShopTableController {
 
     @PostMapping("/create")
     @ApiResponses({
-            @ApiResponse(code = 200,message = "Table has been found"),
+            @ApiResponse(code = 200, message = "Table has been found"),
             @ApiResponse(code = 400, message = "Error in the parameters"),
             @ApiResponse(code = 404, message = "Table has not been found")
     })
     public ResponseEntity<ShopTable> creteShopTable(@RequestBody ShopTable shopTable) {
-        if (shopTable == null || (shopTable.getIdShopTable() != null && shopTableService.getShopTableById(shopTable.getIdShopTable()).isPresent())) {
+        if (shopTable == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         ShopTable responseShopTable = shopTableService.saveShopTable(shopTable).orElse(null);

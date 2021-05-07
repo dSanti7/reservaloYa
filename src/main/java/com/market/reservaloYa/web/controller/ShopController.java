@@ -36,12 +36,12 @@ public class ShopController {
 
     @PostMapping("/create")
     @ApiResponses({
-            @ApiResponse(code = 200,message = "Shop has been found"),
+            @ApiResponse(code = 200, message = "Shop has been found"),
             @ApiResponse(code = 400, message = "Error in the parameters"),
             @ApiResponse(code = 404, message = "Shop has not been found")
     })
     public ResponseEntity<Shop> creteShop(@RequestBody Shop shop) {
-        if (shop == null || (shop.getIdShop() != null && shopService.getShopById(shop.getIdShop()).isPresent())) {
+        if (shop == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Shop responseShop = shopService.saveShop(shop).orElse(null);

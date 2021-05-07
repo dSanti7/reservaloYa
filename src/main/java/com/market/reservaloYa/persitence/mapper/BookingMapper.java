@@ -2,11 +2,9 @@ package com.market.reservaloYa.persitence.mapper;
 
 import com.market.reservaloYa.constants.Status;
 import com.market.reservaloYa.domain.Booking;
-import com.market.reservaloYa.domain.ShopTable;
 import com.market.reservaloYa.persitence.entity.BookingDB;
 import com.market.reservaloYa.persitence.entity.BookingShopTableDB;
 import com.market.reservaloYa.persitence.entity.BookingShopTablePKDB;
-import com.market.reservaloYa.persitence.repository.BookingShopTableRepository;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +24,6 @@ public class BookingMapper {
     public Booking toBooking(@NotNull BookingDB bookingDB) {
 
         return Booking.builder()
-                .idBooking(bookingDB.getId())
                 .status(getStatusByBookingDB(bookingDB))
                 .idClient(bookingDB.getIdClient())
                 .people(bookingDB.getPeople())
@@ -81,7 +78,6 @@ public class BookingMapper {
         return BookingDB.builder()
                 .people(booking.getPeople())
                 .idClient(booking.getIdClient())
-                .id(booking.getIdBooking())
 //                .clientDB(clientMapper.toClientDB(booking.getClient()))
 //                .bookingShopTableDB(getBookingShopTableDBByBooking(booking))
                 .build();
@@ -99,7 +95,6 @@ public class BookingMapper {
 
     private BookingShopTablePKDB getBookingShopTablePKDBByBooking(@NotNull Booking booking) {
         return BookingShopTablePKDB.builder()
-                .idBooking(booking.getIdBooking())
                 .idTable(booking.getIdShopTable())
                 .build();
     }

@@ -1,8 +1,9 @@
 package com.market.reservaloYa.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -12,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ShopTable {
 
-    private Long idShopTable;
     private Long idShop;
     private Short positionShop;
     private Short maxPeople;

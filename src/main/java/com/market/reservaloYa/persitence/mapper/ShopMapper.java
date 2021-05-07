@@ -3,12 +3,10 @@ package com.market.reservaloYa.persitence.mapper;
 import com.market.reservaloYa.domain.Shop;
 import com.market.reservaloYa.domain.ShopTable;
 import com.market.reservaloYa.persitence.entity.ShopDB;
-import com.market.reservaloYa.persitence.entity.ShopTableDB;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +25,6 @@ public class ShopMapper {
                 .name(shopDB.getName())
                 .geographicalPosition(shopDB.getGeographicalPosition())
                 .email(shopDB.getEmail())
-                .idShop(shopDB.getId())
                 .idOwnerShop(shopDB.getIdOwner())
                 .shopTable(getShopTableByShopDB(shopDB))
                 .build();
@@ -49,7 +46,6 @@ public class ShopMapper {
         return ShopDB.builder()
                 .email(shop.getEmail())
                 .geographicalPosition(shop.getGeographicalPosition())
-                .id(shop.getIdShop())
                 .idOwner(shop.getIdOwnerShop())
                 .name(shop.getName())
                 .phoneNumber(shop.getPhoneNumber()).build();

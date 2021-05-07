@@ -1,8 +1,10 @@
 package com.market.reservaloYa.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.market.reservaloYa.constants.Status;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +14,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Booking {
 
-    private Long idBooking;
     private Short people;
     private Status status;
     private LocalDateTime dayBooking;

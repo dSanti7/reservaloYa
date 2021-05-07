@@ -16,6 +16,7 @@ import java.util.List;
 public class OwnerShopController {
     @Autowired
     private OwnerShopService ownerShopService;
+
     @GetMapping("/all")
     public ResponseEntity<List<OwnerShop>> getAllOwnerShops() {
         return new ResponseEntity<>(ownerShopService.getAll(), HttpStatus.OK);
@@ -35,12 +36,12 @@ public class OwnerShopController {
 
     @PostMapping("/create")
     @ApiResponses({
-            @ApiResponse(code = 200,message = "Owner has been found"),
+            @ApiResponse(code = 200, message = "Owner has been found"),
             @ApiResponse(code = 400, message = "Error in the parameters"),
             @ApiResponse(code = 404, message = "Owner has not been found")
     })
     public ResponseEntity<OwnerShop> creteOwnerShop(@RequestBody OwnerShop ownerShop) {
-        if (ownerShop == null || (ownerShop.getIdOwnerShop() != null && ownerShopService.getOwnerShopById(ownerShop.getIdOwnerShop()).isPresent())) {
+        if (ownerShop == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         OwnerShop responseOwnerShop = ownerShopService.saveOwnerShop(ownerShop).orElse(null);
