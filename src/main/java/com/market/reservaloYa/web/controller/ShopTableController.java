@@ -2,6 +2,8 @@ package com.market.reservaloYa.web.controller;
 
 import com.market.reservaloYa.domain.ShopTable;
 import com.market.reservaloYa.domain.service.ShopTableService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,11 @@ public class ShopTableController {
     }
 
     @PostMapping("/create")
+    @ApiResponses({
+            @ApiResponse(code = 200,message = "Table has been found"),
+            @ApiResponse(code = 400, message = "Error in the parameters"),
+            @ApiResponse(code = 404, message = "Table has not been found")
+    })
     public ResponseEntity<ShopTable> creteShopTable(@RequestBody ShopTable shopTable) {
         if (shopTable == null || (shopTable.getIdShopTable() != null && shopTableService.getShopTableById(shopTable.getIdShopTable()).isPresent())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

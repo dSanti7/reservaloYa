@@ -2,6 +2,8 @@ package com.market.reservaloYa.web.controller;
 
 import com.market.reservaloYa.domain.Shop;
 import com.market.reservaloYa.domain.service.ShopService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,11 @@ public class ShopController {
     }
 
     @PostMapping("/create")
+    @ApiResponses({
+            @ApiResponse(code = 200,message = "Shop has been found"),
+            @ApiResponse(code = 400, message = "Error in the parameters"),
+            @ApiResponse(code = 404, message = "Shop has not been found")
+    })
     public ResponseEntity<Shop> creteShop(@RequestBody Shop shop) {
         if (shop == null || (shop.getIdShop() != null && shopService.getShopById(shop.getIdShop()).isPresent())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
