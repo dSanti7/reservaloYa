@@ -109,3 +109,11 @@
 /build/test-results/test/TEST-com.market.reservaloYa.persitence.mapper.BookingMapperTest.xml
 /.gradle/workspace-id.txt
 /.gradle/workspace-id.txt.lock
+/build/classes/java/main/com/market/reservaloYa/domain/service/ApplicationUserDetailsService.class
+/build/classes/java/main/com/market/reservaloYa/web/security/SecurityConfig.class
+/build/classes/java/main/com/market/reservaloYa/web/config/SwaggerConfig.class
+/build/classes/java/main/com/market/reservaloYa/web/controller/AuthController.class
+/build/classes/java/main/com/market/reservaloYa/domain/dto/AuthenticationRequest.class
+/build/classes/java/main/com/market/reservaloYa/domain/dto/AuthenticationResponse.class
+/build/classes/java/main/com/market/reservaloYa/web/security/filter/JwtFilterRequest.class
+/build/classes/java/main/com/market/reservaloYa/web/security/JWTUtil.class
